@@ -1,6 +1,6 @@
 <template>
     <div>
-      <Button type="info" @click="homeTu">退出</Button>
+      <el-Button type="info" @click="homeTu">退出</el-Button>
     </div>
 </template>
 
