@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/Login'
+import Home from '../components/Home'
 Vue.use(VueRouter)
 
 const routes = [
@@ -11,11 +12,22 @@ const routes = [
   {
     path: '/login',
     component: Login
+  },
+  {
+    path: '/home',
+    component: Home
   }
 ]
 
 const router = new VueRouter({
   routes
 })
-
+router.beforeEach((to, from, next) => {
+  // eslint-disable-next-line eqeqeq
+  if (to.path == '/login') next()
+  if (!window.localStorage.getItem('token')) {
+    next('/login')
+  }
+  next()
+})
 export default router

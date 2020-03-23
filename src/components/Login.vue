@@ -12,7 +12,7 @@
                     <el-input v-model="loginForm.password" type="password" prefix-icon="iconfont icon-3702mima"></el-input>
                 </el-form-item>
                 <el-form-item class="btn">
-                    <el-button type="primary">登录</el-button>
+                    <el-button type="primary" @click="login">登录</el-button>
                     <el-button type="info" @click="loginFormRest">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -25,13 +25,13 @@ export default {
   data () {
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       loginFormRules: {
         username: [
           { required: true, message: '请输入账号', trigger: 'blur' },
-          { min: 6, max: 15, message: '必须是6-15位', trigger: 'blur' }
+          { min: 5, max: 15, message: '必须是6-15位', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
@@ -42,6 +42,24 @@ export default {
   methods: {
     loginFormRest () {
       this.$refs.loginFormRef.resetFields()
+    },
+    login () {
+      this.$refs.loginFormRef.validate(async (res) => {
+        if (!res) {
+          return null
+        }
+        // eslint-disable-next-line no-unused-vars
+        const { data } = await this.$http.post('/login', this.loginForm)
+        // eslint-disable-next-line eqeqeq
+        if (data.meta.status == 200) {
+          this.$Message.success('登录成功！')
+          // console.log(data)
+          window.localStorage.setItem('token', data.data.token)
+          this.$router.replace('/home')
+        } else {
+          this.$Message.error('登录失败')
+        }
+      })
     }
   }
 }
