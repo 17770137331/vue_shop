@@ -33,7 +33,7 @@
                    <el-button @click="shancuUser(scope)" type="primary" icon="el-icon-edit" size="mini"></el-button>
                    <el-button @click="deleteUser(scope)" type="danger" icon="el-icon-delete" size="mini"></el-button>
                    <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-                    <el-button type="warning" icon="el-icon-setting" size="mini"></el-button>
+                    <el-button type="warning" icon="el-icon-setting" size="mini" @click="fenpenquanxian(scope)"></el-button>
                    </el-tooltip>
                   </template>
                 </el-table-column>
@@ -95,6 +95,29 @@
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="xgUser">确 定</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog
+          title="分配角色"
+          :visible.sync="qxDialogVisible"
+          width="50%"
+          @close="fpclose"
+          >
+            <p>当前的用户：{{ fpusername }}</p>
+            <p>当前的角色：{{ fprole_name }}</p>
+            <p>分配新角色：
+               <el-select v-model="fpvalue" placeholder="请选择">
+                <el-option
+                  v-for="item in qxsj"
+                  :key="item.id"
+                  :label="item.roleName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </p>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="qxDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="fpqd">确 定</el-button>
           </span>
         </el-dialog>
     </div>
@@ -170,7 +193,14 @@ export default {
           { required: true, message: '请输入手机号', trigger: 'blur' },
           { validator: checkMobile, trigger: 'blur' }
         ]
-      }
+      },
+      qxDialogVisible: false,
+      fprole_name: '',
+      fpusername: '',
+      qxsj: [],
+      fpvalue: '',
+      fpid: 0,
+      userId1: 0
     }
   },
   methods: {
@@ -217,6 +247,7 @@ export default {
         if (!res) return null
         const bb = await this.$http.post('/users', this.userForm)
         // console.log(bb)
+        // eslint-disable-next-line eqeqeq
         if (bb.data.meta.status == 201) {
           this.$Message.success('添加成功')
           this.getUserList()
@@ -262,15 +293,44 @@ export default {
         type: 'warning'
       }).catch(error => error)
       // console.log(jk)
+      // eslint-disable-next-line eqeqeq
       if (jk == 'confirm') {
         const sc = await this.$http.delete(`users/${item.row.id}`)
         // console.log(sc)
+        // eslint-disable-next-line eqeqeq
         if (sc.data.meta.status == 200) {
           this.$Message.success('成功删除')
           this.getUserList()
           // this.dialogVisible = false
         }
       }
+    },
+    async fenpenquanxian(item) {
+      const user = item.row
+      this.userId1 = user.id
+      // console.log(item)
+      const { data } = await this.$http.get('/roles')
+      // console.log(data)
+      this.qxsj = data.data
+      // this.fpid = user.id
+      // console.log(this.fpid)
+      this.fprole_name = user.role_name
+      this.fpusername = user.username
+      this.qxDialogVisible = true
+    },
+    async fpqd() {
+      // console.log(this.fpid)
+      if (!this.fpvalue) {
+        return this.$Message('请分配角色')
+      }
+      const fp = await this.$http.put(`users/${this.userId1}/role`, { rid: this.fpvalue })
+      this.$Message.success('角色分配成功')
+      console.log(fp)
+      this.qxDialogVisible = false
+      this.getUserList()
+    },
+    fpclose() {
+      this.fpvalue = ''
     }
   }
 }
