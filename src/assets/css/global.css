@@ -9,6 +9,7 @@ body,
 
 #app {
     min-width: 1366px;
+    font-size: 12px;
 }
 
 .el-breadcrumb {
@@ -18,4 +19,12 @@ body,
 
 .el-card {
     box-shadow: 0 1px rgba(0, 0, 0, 0.15) !important;
+}
+
+.el-cascader-menu {
+    height: 204px;
+}
+
+.ql-container {
+    height: 300px !important;
 }
