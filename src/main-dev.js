@@ -10,12 +10,19 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css' // import styles
 import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
+import Nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 Vue.use(VueQuillEditor)
 Vue.component(ZkTable.name, ZkTable)
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
+    Nprogress.start()
     config.headers.Authorization = window.localStorage.getItem('token')
         // console.log(config)
+    return config
+})
+axios.interceptors.response.use(config => {
+    Nprogress.done()
     return config
 })
 Vue.filter('toStringDate', item => {
@@ -36,4 +43,5 @@ Vue.config.productionTip = false
 new Vue({
     router,
     render: h => h(App)
+        // eslint-disable-next-line eol-last
 }).$mount('#app')
