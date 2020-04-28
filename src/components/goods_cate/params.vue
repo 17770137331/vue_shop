@@ -223,9 +223,9 @@
                     })
                     // eslint-disable-next-line eqeqeq
                     if (res.meta.status == 201) {
-                        this.$Message.success(res.meta.msg)
+                        this.$message.success(res.meta.msg)
                     } else {
-                        this.$Message.error(res.meta.msg)
+                        this.$message.error(res.meta.msg)
                     }
                     this.handleClick()
                     // console.log(res.meta.status)
@@ -253,9 +253,9 @@
                     console.log(res)
                     // eslint-disable-next-line eqeqeq
                     if (res.meta.status == 200) {
-                        this.$Message.success('修改成功')
+                        this.$message.success('修改成功')
                     } else {
-                        this.$Message.error('修改失败')
+                        this.$message.error('修改失败')
                     }
                     this.handleClick()
                     this.dialogVisible2 = false
@@ -266,9 +266,9 @@
                 // console.log(res, item)
                 // eslint-disable-next-line eqeqeq
                 if (res.meta.status == 200) {
-                    this.$Message.success('删除成功')
+                    this.$message.success('删除成功')
                 } else {
-                    this.$Message.error('删除失败')
+                    this.$message.error('删除失败')
                 }
                 this.handleClick()
             },

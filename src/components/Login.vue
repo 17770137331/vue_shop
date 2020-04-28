@@ -52,12 +52,12 @@ export default {
         const { data } = await this.$http.post('/login', this.loginForm)
         // eslint-disable-next-line eqeqeq
         if (data.meta.status == 200) {
-          this.$Message.success('登录成功！')
+          this.$message.success('登录成功！')
           // console.log(data)
           window.localStorage.setItem('token', data.data.token)
           this.$router.replace('/home')
         } else {
-          this.$Message.error('登录失败')
+          this.$message.error('登录失败')
         }
       })
     }

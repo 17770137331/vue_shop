@@ -249,11 +249,11 @@ export default {
         // console.log(bb)
         // eslint-disable-next-line eqeqeq
         if (bb.data.meta.status == 201) {
-          this.$Message.success('添加成功')
+          this.$message.success('添加成功')
           this.getUserList()
           this.centerDialogVisible = false
         } else {
-          this.$Message.error('添加失败')
+          this.$message.error('添加失败')
         }
       })
     },
@@ -272,11 +272,11 @@ export default {
         // console.log(sg)
         // eslint-disable-next-line eqeqeq
         if (sg.data.meta.status == 200) {
-          this.$Message.success('修改成功')
+          this.$message.success('修改成功')
           this.getUserList()
           this.dialogVisible = false
         } else {
-          this.$Message.success('修改失败')
+          this.$message.success('修改失败')
         }
         // console.log(this.xiugai.id)
       })
@@ -287,7 +287,7 @@ export default {
     },
     async deleteUser (item) {
       // console.log(item)
-      const jk = await this.$MessageBox('此操作将永久删除该用户, 是否继续?', '提示', {
+      const jk = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -299,7 +299,7 @@ export default {
         // console.log(sc)
         // eslint-disable-next-line eqeqeq
         if (sc.data.meta.status == 200) {
-          this.$Message.success('成功删除')
+          this.$message.success('成功删除')
           this.getUserList()
           // this.dialogVisible = false
         }
@@ -321,10 +321,10 @@ export default {
     async fpqd() {
       // console.log(this.fpid)
       if (!this.fpvalue) {
-        return this.$Message('请分配角色')
+        return this.$message('请分配角色')
       }
       const fp = await this.$http.put(`users/${this.userId1}/role`, { rid: this.fpvalue })
-      this.$Message.success('角色分配成功')
+      this.$message.success('角色分配成功')
       console.log(fp)
       this.qxDialogVisible = false
       this.getUserList()

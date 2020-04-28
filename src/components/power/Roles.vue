@@ -101,13 +101,13 @@ export default {
             type: 'warning'
             }).catch(err => err)
             if (jg != 'confirm') {
-                this.$Message('取消删除')
+                this.$message('取消删除')
             } else {
                 const sc = await this.$http.delete(`roles/${id1.id}/rights/${id2}`)
                 // console.log(123, sc)
                 id1.children = sc.data.data
                 // this.hvTree()
-                this.$Message('删除成功')
+                this.$message('删除成功')
             }
         },
         async fenpeiquanxian(scope) {
@@ -145,7 +145,7 @@ export default {
             const { data } = await this.$http.post(`roles/${this.qxid}/rights`, { rids: str })
             // console.log(data)
             if (data.meta.ststus != 200) {
-                this.$Message.success(data.meta.msg)
+                this.$message.success(data.meta.msg)
             }
             this.dialogVisible = false
             this.hvTree()

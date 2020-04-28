@@ -9,7 +9,7 @@ module.exports = {
                 axios: 'axios',
                 lodash: '_',
                 echarts: 'echarts',
-                nprogress: 'Nprogress',
+                nprogress: 'NProgress',
                 'vue-quill-editor': 'VueQuillEditor'
             })
             config.plugin('html').tap(args => {

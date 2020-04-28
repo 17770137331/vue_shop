@@ -213,7 +213,7 @@ import _ from 'lodash'
             handLeave (New, Older) {
                 if (this.activeName !== 0) {
                     if (this.model.goods_cat.length === 0) {
-                        this.$Message.error('请选择分类')
+                        this.$message.error('请选择分类')
                         return false
                     }
                 }
@@ -248,7 +248,7 @@ import _ from 'lodash'
             async add() {
                 this.$refs.ref.validate(item => {
                     if (!item) {
-                        return this.$Message.error('请填写必要的表单项')
+                        return this.$message.error('请填写必要的表单项')
                     }
                 })
                 // console.log(this.shopData)
@@ -274,10 +274,10 @@ import _ from 'lodash'
                 const { data: res } = await this.$http.post('/goods', model2)
                 console.log(res)
                 if (res.meta.status == 201) {
-                    this.$Message.success(res.meta.msg)
+                    this.$message.success(res.meta.msg)
                     this.$router.push('/goods')
                 } else {
-                    this.$Message.error(res.meta.msg)
+                    this.$message.error(res.meta.msg)
                 }
             }
         }

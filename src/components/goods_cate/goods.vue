@@ -101,9 +101,9 @@
             async det(item) {
                 const { data: res } = await this.$http.delete(`/goods/${item.goods_id}`)
                 if (res.meta.status == 200) {
-                    this.$Message.success(res.meta.msg)
+                    this.$message.success(res.meta.msg)
                 } else {
-                    this.$Message.error(res.meta.msg)
+                    this.$message.error(res.meta.msg)
                 }
                 this.goodsList()
                 // console.log(res)

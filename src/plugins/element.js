@@ -41,6 +41,6 @@ Vue.use(Timeline)
 Vue.use(TimelineItem)
     // Vue.component(Message)
 
-Vue.prototype.$Message = Message
+Vue.prototype.$message = Message
 Vue.prototype.$MessageBox = MessageBox.confirm
 Vue.prototype.$confirm = MessageBox.confirm
