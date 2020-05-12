@@ -96,7 +96,7 @@ export default {
 .el-header {
   background-color: #373d41;
   justify-content: space-between;
-  padding-left: 0;
+  // padding-left: 0;
   display: flex;
   align-items: center;
   > div{

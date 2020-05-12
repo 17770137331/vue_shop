@@ -1,10 +1,13 @@
 <template>
     <div class="loginBackground">
         <div class="loginBackground_box">
-            <div class="logo">
+            <!-- <div class="logo">
                 <img src="../assets/logo.png" alt="">
-            </div>
+            </div> -->
             <el-form  label-width="0px" ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="biaodan">
+                <el-form-item>
+                  <h2>电商管理系统</h2>
+                </el-form-item>
                 <el-form-item prop="username">
                     <el-input v-model="loginForm.username" prefix-icon="iconfont icon-user"></el-input>
                 </el-form-item>
@@ -78,6 +81,9 @@ export default {
             top: 50%;
             left: 50%;
             transform: translate(-50%,-50%);
+            h2{
+              color: rgb(66, 64, 64);
+            }
             .logo{
                 width: 130px;
                 height: 130px;
