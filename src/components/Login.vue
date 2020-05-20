@@ -45,6 +45,8 @@ export default {
   methods: {
     loginFormRest () {
       this.$refs.loginFormRef.resetFields()
+      this.loginForm.username = ''
+      this.loginForm.password = ''
     },
     login () {
       this.$refs.loginFormRef.validate(async (res) => {

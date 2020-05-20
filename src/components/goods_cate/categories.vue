@@ -31,9 +31,9 @@
                    <el-tag size="mini" type="success" v-else-if="scope.row.cat_level==1">二级</el-tag>
                    <el-tag size="mini" type="danger" v-else-if="scope.row.cat_level==2">三级</el-tag>
                 </template>
-                <template slot="cz">
-                    <el-button size="mini" type="primary" icon="el-icon-edit">编辑</el-button>
-                    <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+                <template slot="cz" slot-scope="scope">
+                    <el-button size="mini" type="primary" icon="el-icon-edit" @click="bianji(scope.row)">编辑</el-button>
+                    <el-button size="mini" type="danger" icon="el-icon-delete" @click="shanchu(scope.row)">删除</el-button>
                 </template>
             </zk-table>
             <div class="block">
@@ -73,6 +73,21 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="qd">确 定</el-button>
+            </span>
+        </el-dialog>
+         <el-dialog
+        title="编辑分类"
+        :visible.sync="dialogVisible2"
+        width="50%"
+        @close="handleClose2">
+        <el-form :model="model" label-width="80px">
+            <el-form-item label="分类名称:">
+                <el-input v-model="model.cat_name"></el-input>
+            </el-form-item>
+        </el-form>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click="queding">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -139,7 +154,12 @@
                     label: 'cat_name',
                     children: 'children'
                 },
-                cascaderValue: []
+                cascaderValue: [],
+                dialogVisible2: false,
+                model: {
+                    cat_name: ''
+                },
+                quedingId: 0
             }
         },
         methods: {
@@ -218,6 +238,35 @@
                     this.dialogVisible = false
                     this.categories()
                 })
+            },
+            async shanchu(scope) {
+                const { data } = await this.$http.delete(`categories/${scope.cat_id}`)
+                if(data.meta.status == 200) {
+                    this.$message.success(data.meta.msg)
+                }else {
+                    this.$message.error('删除失败')
+                }
+                this.categories()
+            },
+            bianji(scope) {
+                // console.log(scope)
+                this.quedingId = scope.cat_id
+                this.dialogVisible2 = true
+            },
+            handleClose2() {
+                this.dialogVisible2 = false
+                this.model.cat_name = ''
+            },
+            async queding() {
+                const { data } = await this.$http.put(`categories/${this.quedingId}`, this.model)
+                console.log(data)
+                if(data.meta.status = 200) {
+                    this.$message.success('修改成功')
+                }else {
+                    this.$message.error('修改失败')
+                }
+                this.categories()
+                this.dialogVisible2 = false
             }
 
         }

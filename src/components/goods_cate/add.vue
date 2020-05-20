@@ -98,6 +98,7 @@
         >
         <img :src="url" alt="" class="img">
         </el-dialog>
+        
     </div>
 </template>
 

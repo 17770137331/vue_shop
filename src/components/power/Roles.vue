@@ -8,7 +8,7 @@
         <el-card>
             <el-row>
                 <el-col>
-                    <el-button type="primary">添加角色</el-button>
+                    <el-button type="primary" @click="addRoles">添加角色</el-button>
                 </el-col>
             </el-row>
                 <el-table :data="tree" border class="eltable">
@@ -40,8 +40,8 @@
                     <el-table-column label="角色描述" prop="roleDesc"></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
-                            <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+                            <el-button type="primary" icon="el-icon-edit" size="mini" @click="bianji(scope)">编辑</el-button>
+                            <el-button type="danger" icon="el-icon-delete" size="mini" @click="shanchu(scope)">删除</el-button>
                             <el-button type="warning" icon="el-icon-setting" size="mini" @click="fenpeiquanxian(scope)">分配权限</el-button>
                         </template>
                     </el-table-column>
@@ -67,6 +67,42 @@
             <el-button type="primary" @click="allRights">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog
+        title="添加角色"
+        :visible.sync="dialogVisible2"
+        width="50%"
+        @close="handleClose2">
+        <el-form :model="model" label-width="50px">
+            <el-form-item label="角色:">
+                <el-input v-model="model.roleName"></el-input>
+            </el-form-item>
+            <el-form-item label="描述:">
+                <el-input v-model="model.roleDesc"></el-input>
+            </el-form-item>
+        </el-form>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click="queding">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+        title="编辑角色"
+        :visible.sync="dialogVisible3"
+        width="50%"
+        @close="handleClose3">
+        <el-form :model="model2" label-width="50px">
+            <el-form-item label="角色:">
+                <el-input v-model="model2.roleName"></el-input>
+            </el-form-item>
+            <el-form-item label="描述:">
+                <el-input v-model="model2.roleDesc"></el-input>
+            </el-form-item>
+        </el-form>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible3 = false">取 消</el-button>
+            <el-button type="primary" @click="queding2">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -85,7 +121,18 @@ export default {
                 children: 'children'
             },
             defKeys: [],
-            qxid: 0
+            qxid: 0,
+            dialogVisible2: false,
+            model: {
+                roleName: '',
+                roleDesc: ''
+            },
+            dialogVisible3: false,
+             model2: {
+                roleName: '',
+                roleDesc: ''
+            },
+            bianjiId: 500
         }
     },
     methods: {
@@ -110,6 +157,40 @@ export default {
                 this.$message('删除成功')
             }
         },
+        // 编辑角色
+        bianji(scope) {
+            this.bianjiId = scope.row.id
+            this.model2.roleName = scope.row.roleName
+            this.model2.roleDesc = scope.row.roleDesc
+            this.dialogVisible3 = true
+        },
+        handleClose3() {
+            this.dialogVisible3 = false
+            this.model2.roleName = ''
+            this.model2.roleDesc = ''
+        },
+        async queding2() {
+            const { data } = await this.$http.put(`roles/${this.bianjiId}`, this.model2)
+            console.log(data)
+            if(data.meta.status == 200) {
+                this.$message.success('修改成功')
+            }else {
+                this.$message.error('修改失败')
+            }
+            this.hvTree()
+            this.dialogVisible3 = false
+        },
+        // 删除角色
+        async shanchu(scope) {
+            const { data } = await this.$http.delete(`roles/${scope.row.id}`)
+            if(data.meta.status == 200) {
+                this.$message.success(data.meta.msg)
+            }else {
+                this.$message.error('删除失败')
+            }
+            this.hvTree()
+        },
+        // 分配权限
         async fenpeiquanxian(scope) {
             this.qxid = scope.row.id
             const { data } = await this.$http.get('rights/tree')
@@ -149,7 +230,26 @@ export default {
             }
             this.dialogVisible = false
             this.hvTree()
+        },
+        // 添加角色
+        addRoles() {
+            this.dialogVisible2 = true
+        },
+        // 添加角色dialog
+        handleClose2() {
+            this.dialogVisible2 = false
+            this.model.roleName = ''
+            this.model.roleDesc = ''
+        },
+        // dialog确定
+        async queding() {
+            const { data } = await this.$http.post('/roles', this.model)
+            console.log(data)
+            this.$message.success(data.meta.msg)
+            this.dialogVisible2 = false
+            this.hvTree()
         }
+
     }
 }
 </script>

@@ -28,7 +28,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+                        <el-button @click="bianji(scope.row)" type="primary" icon="el-icon-edit" size="mini"></el-button>
                         <el-button @click="det(scope.row)" type="danger" icon="el-icon-delete" size="mini"></el-button>
                     </template>
                 </el-table-column>
@@ -47,6 +47,27 @@
                 </el-pagination>
             </div>
         </el-card>
+        <el-dialog
+        title="修改商品"
+        :visible.sync="dialogVisible2"
+        width="50%"
+        @close="handleClose2">
+        <el-form :model="model" label-width="80px">
+            <el-form-item label="商品名称:">
+                <el-input v-model="model.goods_name"></el-input>
+            </el-form-item>
+            <el-form-item label="商品价格:">
+                <el-input v-model="model.goods_price"></el-input>
+            </el-form-item>
+            <el-form-item label="商品重量:">
+                <el-input v-model="model.goods_weight"></el-input>
+            </el-form-item>
+        </el-form>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible2 = false">取 消</el-button>
+            <el-button type="primary" @click="queding">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -63,7 +84,15 @@
                     pagenum: 1,
                     pagesize: 10,
                     total: 0
-                }
+                },
+                dialogVisible2: false,
+                model: {
+                    goods_name: '',
+                    goods_price: 0,
+                    goods_weight: 0,
+                    goods_number: 0,
+                },
+                bianjiId: 0
             }
         },
         methods: {
@@ -111,6 +140,28 @@
             // 添加商品
             add() {
                 this.$router.push('/goods/add')
+            },
+            // 编辑商品
+            bianji(scope) {
+                console.log(scope, 123)
+                this.model.goods_name = scope.goods_name
+                this.model.goods_price = scope.goods_price
+                this.model.goods_weight = scope.goods_weight
+                this.model.goods_number = scope.goods_number
+                this.bianjiId = scope.goods_id
+                this.dialogVisible2 = true
+            },
+            handleClose2() {
+                this.dialogVisible2 = false
+                this.model.goods_name = ''
+                this.model.goods_price = 0
+                this.model.goods_weight = 0
+            },
+            async queding() {
+                const { data } = await this.$http.put(`goods/${this.bianjiId}`, this.model)
+                console.log(data)
+                this.goodsList()
+                this.dialogVisible2 = true
             }
         }
     }
